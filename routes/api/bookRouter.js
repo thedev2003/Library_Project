@@ -1,6 +1,4 @@
 const express = require('express'); 
-const bodyParser = require('body-parser'); 
-const mongoose = require('mongoose');
 const bookRouter = express.Router();
 const authenticate = require('../../authenticate'); 
 const cors = require('../cors'); // CORS config
