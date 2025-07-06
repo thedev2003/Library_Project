@@ -1,87 +1,89 @@
-const express = require('express'); 
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose=require('mongoose');
 const bookRouter = express.Router();
-const authenticate = require('../../authenticate'); 
-const cors = require('../cors'); // CORS config
-const Books = require('../../models/books'); // Book model
+const authenticate=require('../../authenticate');
+const cors = require('../cors');
+const Books=require('../../models/books');
+bookRouter.use(bodyParser.json());
 
+bookRouter.route('/')
+.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+.get(cors.corsWithOptions,(req,res,next) => {
+    Books.find(req.query)
+    .sort({name: 'asc'})
+    .then((books)=>{
+        res.statusCode=200;
+        res.setHeader('Content-Type','application/json');
+        res.json(books);
+    },(err)=>(next(err)))
+    .catch((err)=>(next(err)))
+})
+.post(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
+    Books.create(req.body)
+    .then((book)=>{
+        res.statusCode=200;
+        res.setHeader('Content-Type','application/json');
+        res.json(book);
+    },(err)=>(next(err)))
+    .catch((err)=>(next(err))) 
+})
+.put(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
+    res.statusCode = 403;
+    res.end('PUT operation not supported on /books');
+})
+.delete(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
+    res.statusCode = 403;
+    res.end('DELETE operation not supported on /books');
 
-// /api/books
-// Preflight OPTIONS request
-bookRouter.options('/', cors.corsWithOptions, (req, res) => res.sendStatus(200));
-
-// Get all books (with optional query)
-bookRouter.get('/', cors.corsWithOptions, async (req, res, next) => {
-    try {
-        const books = await Books.find(req.query).sort({ name: 'asc' });
-        res.status(200).json(books);
-    } catch (err) {
-        next(err);
-    }
+/*   Books.remove({})
+    .then((resp) => {
+        console.log("Removed All Books");
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(resp);
+    }, (err) => next(err))
+    .catch((err) => next(err));*/
 });
 
-// Add a new book (admin only)
-bookRouter.post('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, async (req, res, next) => {
-    try {
-        const book = await Books.create(req.body);
-        res.status(200).json(book);
-    } catch (err) {
-        next(err);
-    }
-});
+bookRouter.route('/:bookId')
+.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); 
+    res.setHeader('Access-Control-Allow-Credentials', 'true')})
+.get(cors.corsWithOptions,(req,res,next) => {
+    Books.findById(req.params.bookId)
+    .then((book)=>{
+        res.statusCode=200;
+        res.setHeader('Content-Type','application/json');
+        res.json(book);
+    },(err)=>(next(err)))
+    .catch((err)=>(next(err)));
+})
 
-// Not supported
-bookRouter.put('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
-    res.status(403).end('PUT operation not supported on /books');
-});
+.post(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
+    res.statusCode = 403;
+    res.end('POST operation not supported on /books/'+ req.params.bookId);
+})
 
-// Not supported
-bookRouter.delete('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
-    res.status(403).end('DELETE operation not supported on /books');
-});
+.put(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
+ Books.findByIdAndUpdate(req.params.bookId,{
+     $set: req.body
+ },{new: true})
+ .then((book) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json(book);
+}, (err) => next(err))
+.catch((err) => res.status(400).json({success: false}));
+})
 
-
-
-
-// /api/books/:bookId
-// Preflight OPTIONS request
-bookRouter.options('/:bookId', cors.corsWithOptions, (req, res) => {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.sendStatus(200);
-});
-
-// Get a book by ID
-bookRouter.get('/:bookId', cors.corsWithOptions, async (req, res, next) => {
-    try {
-        const book = await Books.findById(req.params.bookId);
-        res.status(200).json(book);
-    } catch (err) {
-        next(err);
-    }
-});
-
-// Not supported
-bookRouter.post('/:bookId', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
-    res.status(403).end('POST operation not supported on /books/' + req.params.bookId);
-});
-
-// Update a book by ID (admin only)
-bookRouter.put('/:bookId', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, async (req, res, next) => {
-    try {
-        const book = await Books.findByIdAndUpdate(req.params.bookId, { $set: req.body }, { new: true });
-        res.status(200).json(book);
-    } catch (err) {
-        res.status(400).json({ success: false });
-    }
-});
-
-// Delete a book by ID (admin only)
-bookRouter.delete('/:bookId', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, async (req, res, next) => {
-    try {
-        await Books.findByIdAndRemove(req.params.bookId);
-        res.status(200).json({ _id: req.params.bookId, success: true });
-    } catch (err) {
-        res.status(400).json({ success: false });
-    }
+.delete(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
+    Books.findByIdAndRemove(req.params.bookId)
+    .then((resp) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({_id: req.params.bookId,success: true});
+    }, (err) => next(err))
+    .catch((err) =>  res.status(400).json({success: false}));
 });
 
 module.exports = bookRouter;
