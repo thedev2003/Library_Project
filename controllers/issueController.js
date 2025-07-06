@@ -3,7 +3,7 @@ const Issue = require('../models/issues'); // Adjust path if needed
 // GET /api/issues (list all issues)
 exports.getAllIssues = async (req, res, next) => {
 	try {
-		const issues = await Issue.find().populate('book user');
+		const issues = await Issue.find().populate('book user').exec();
 		res.json(issues);
 	} catch (err) {
 		next(err);
@@ -13,7 +13,7 @@ exports.getAllIssues = async (req, res, next) => {
 // GET /api/issues/:id (get issue by ID)
 exports.getIssueById = async (req, res, next) => {
 	try {
-		const issue = await Issue.findById(req.params.id).populate('book user');
+		const issue = await Issue.findById(req.params.id).populate('book user').exec();
 		if (!issue) return res.status(404).json({ message: "Issue not found" });
 		res.json(issue);
 	} catch (err) {
