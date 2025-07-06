@@ -26,9 +26,8 @@ const connectToDB = require('./config/dbConnect');
 connectToDB();
 
 
-
 // Serve static assets if in production
-const path = require('path');
+// const path = require('path');
 // if (process.env.NODE_ENV === 'production') {
 // 	// Set static folder
 // 	app.use(express.static('client/build'));
@@ -39,5 +38,4 @@ const path = require('path');
 // }
 
 const port = process.env.PORT || 5000;
-
 app.listen(port, () => console.log(`Server started running on port ${port}`));
