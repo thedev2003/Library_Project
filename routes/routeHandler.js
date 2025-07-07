@@ -2,14 +2,16 @@ const router = require('express').Router();
 const { getAllBooks, getBookById, createBook,
 	updateBook, deleteBook } = require('../controllers/bookController');
 
-const { getAllUsers, signup, login, 
-	getUserById, updateUser} = require('../controllers/userController');
+const { getAllUsers, signup, login,
+	getUserById, updateUser } = require('../controllers/userController');
 
 const { getAllIssues, getIssueById, createIssue, returnIssue,
 	updateIssue, deleteIssue } = require('../controllers/issueController');
 
-const {cors, corsWithOptions} = require('../cors');
-const { verifyUser, verifyAdmin } = require('../authenticate');
+// CORS and authentication middleware
+const { corsWithOptions } = require('./cors');
+const { verifyUser, verifyAdmin } = require('./authenticate');
+
 
 
 // Book routes

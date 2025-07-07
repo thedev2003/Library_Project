@@ -23,7 +23,7 @@ const bookSchema = new Schema({
         required: true,
         unique: true
     },
-    cat: {
+    category: {
         type: String,
         enum: ['Romance','Technology','Computer Science','Management','Electronics','Physics','Chemistry','Mathematics','Fiction','Philosophy','Language','Arts','Other'],
         required: true
@@ -48,6 +48,5 @@ const bookSchema = new Schema({
 }, {
     timestamps: true
 });
-var Books = mongoose.model('Book',bookSchema);
 
-module.exports=Books;
+module.exports = mongoose.model('Book',bookSchema);

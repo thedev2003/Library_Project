@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const mongoURI = process.env.MONGO_URI;
-const secretKey = process.env.SECRET_KEY;
 const connectToDB = async () => {
 	try {
-		mongoose.connect(mongoURI);
+		mongoose.connect(process.env.MONGO_URI);
 		console.log("MongoDB Connected");
 	}
 	catch (err) {

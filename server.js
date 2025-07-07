@@ -7,8 +7,6 @@ const passport = require('passport');
 app.use(passport.initialize());
 // var authenticate = require('./authenticate');
 
-// globally enable CORS for all routes
-app.use(require('./routes/cors'));
 
 // mount routes
 app.use('/api', require('./routes/routeHandler'));
@@ -37,5 +35,6 @@ connectToDB();
 // 	});
 // }
 
+require('dotenv').config();
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started running on port ${port}`));
