@@ -1,4 +1,4 @@
-import * as ActionTypes from './ActionTypes';
+import ActionTypes from './ActionTypes';
 import { baseUrl } from '../baseUrl'
 
 export const addBook = (book) => ({
