@@ -1,4 +1,4 @@
-export const ActionTypes = {
+const ActionTypes = {
 	// Book management actions
 	BOOKS_LOADING: 'BOOKS_LOADING',
 	BOOKS_FAILED: 'BOOKS_FAILED',
@@ -28,3 +28,4 @@ export const ActionTypes = {
 	ADD_USERS: 'ADD_USERS',
 	USERS_FAILED: 'USERS_FAILED'
 }
+export default ActionTypes;

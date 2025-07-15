@@ -1,6 +1,7 @@
+// Redux reducer for issues state. Handles issue list and return actions.
 import ActionTypes from './ActionTypes';
 
-const postIssue = (state = {
+const Issues = (state = {
 	isLoading: true,
 	errMess: null,
 	issues: []
@@ -8,17 +9,13 @@ const postIssue = (state = {
 	switch (action.type) {
 		case ActionTypes.ADD_ISSUES:
 			return { ...state, isLoading: false, errMess: null, issues: action.payload };
-
 		case ActionTypes.ISSUES_LOADING:
 			return { ...state, isLoading: true, errMess: null, issues: [] }
-
 		case ActionTypes.ISSUES_FAILED:
 			return { ...state, isLoading: false, errMess: action.payload };
-
 		case ActionTypes.ADD_ISSUE:
 			var issue = action.payload;
 			return { ...state, issues: state.issues.concat(issue) };
-
 		case ActionTypes.RETURN_ISSUE:
 			var newissue = action.payload;
 			return {
@@ -31,9 +28,8 @@ const postIssue = (state = {
 					}
 				})
 			}
-
 		default:
 			return state;
 	}
 };
-export default postIssue;
+export default Issues;

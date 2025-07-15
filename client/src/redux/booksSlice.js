@@ -1,6 +1,7 @@
-import * as ActionTypes from './ActionTypes';
+import ActionTypes from './ActionTypes';
 
-const postBook = (state = {
+// Books reducer
+const Books = (state = {
 	isLoading: true,
 	errMess: null,
 	books: []
@@ -44,4 +45,4 @@ const postBook = (state = {
 			return state;
 	}
 };
-export default postBook;
+export default Books;

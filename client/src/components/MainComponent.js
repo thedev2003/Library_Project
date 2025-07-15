@@ -20,7 +20,7 @@ import Profile from './ProfileComponent';
 import AddBook from './AddBookComponent';
 import History from './HistoryComponent';
 import Issue from './IssueComponent';
-import Return from './ReturnComponent';
+import ReturnComponent from './ReturnComponent';
 import UserDetail from './UserDetailComponent';
 import Stats from './StatsComponent';
 import Log from './LogComponent';

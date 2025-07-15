@@ -1,8 +1,6 @@
-import * as ActionTypes from './ActionTypes';
+// Redux reducer for authentication state. Handles login, logout, and user info updates.
+import ActionTypes from './ActionTypes';
 
-// The auth reducer. The starting state sets authentication
-// based on a token being in local storage. In a real app,
-// we would also want a util to check if the token is expired.
 const Auth = (state = {
 	isLoading: false,
 	isAuthenticated: localStorage.getItem('token') ? true : false,
@@ -41,7 +39,6 @@ const Auth = (state = {
 				isLoading: true,
 				isAuthenticated: true
 			};
-
 		case ActionTypes.LOGOUT_SUCCESS:
 			return {
 				...state,
@@ -51,13 +48,11 @@ const Auth = (state = {
 				user: null,
 				userinfo: null
 			};
-
 		case ActionTypes.EDIT_USER:
 			return {
 				...state,
 				userinfo: action.payload
 			};
-
 		case ActionTypes.EDIT_PASSWORD:
 			return {
 				...state,
