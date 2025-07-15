@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { postIssue } from '../redux/issuesSlice';
+import  postIssue  from '../redux/issuesSlice';
 import Loading from './common/Loading';
 import ErrorMessage from './common/Error';
 

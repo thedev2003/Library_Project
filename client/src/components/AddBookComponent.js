@@ -3,7 +3,7 @@
 import React from 'react';
 import { LocalForm, Control, Errors } from 'react-redux-form';
 import { useDispatch } from 'react-redux';
-import { postBook } from '../redux/booksSlice';
+import postBook  from '../redux/booksSlice';
 import { required, minLength, maxLength, isNumber } from '../utils/validators';
 import { Row, Col, Label, Button } from 'reactstrap';
 
